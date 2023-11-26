@@ -1,0 +1,48 @@
+service: api-gw-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  architecture: arm64
+  region: ap-northeast-2
+  memorySize: 256
+  timeout: 5
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:*
+          Resource:
+            - arn:aws:dynamodb:ap-northeast-2:301591718339:table/serverless-ddb-dev
+  deploymentBucket:
+    name: ps-lambda-deploy-test
+  logRetentionInDays: 180
+  httpApi:
+    id: ${file(./config_${sls:stage}.yml):apigw_id}
+  tags:
+    Stage: ${sls:stage}
+
+# you can add packaging information here
+package:
+  individually: true
+  patterns:
+    - '!.*'
+    - '!*'
+    
+functions:
+  test:
+    handler: test.handler
+    package:
+      individually: true
+      patterns:
+        - 'test.js'
+        - 'package.json'
+    environment:
+      APIGW_DOMAIN: polarishare-testbed.com
+      DDB_TABLE: serverless-ddb-dev
+    events:
+      - httpApi:
+          path: /{param}
+          method: GET
