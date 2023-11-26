@@ -1,0 +1,24 @@
+service: node-lambda
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  architecture: arm64
+  region: ap-northeast-2
+  memorySize: 256
+  timeout: 5
+
+package:
+  individually: true
+  patterns:
+    - '!.*'
+    - '!*'
+
+functions:
+  function1:
+    handler: index.handler
+    package:
+      individually: true
+      patterns:
+        - 'index.js'
