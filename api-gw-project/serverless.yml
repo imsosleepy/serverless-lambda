@@ -19,10 +19,6 @@ provider:
   deploymentBucket:
     name: ps-lambda-deploy-test
   logRetentionInDays: 180
-  httpApi:
-    id: ${file(./config_${sls:stage}.yml):apigw_id}
-  tags:
-    Stage: ${sls:stage}
 
 # you can add packaging information here
 package:
@@ -39,10 +35,7 @@ functions:
       patterns:
         - 'test.js'
         - 'package.json'
-    environment:
-      APIGW_DOMAIN: polarishare-testbed.com
-      DDB_TABLE: serverless-ddb-dev
     events:
       - httpApi:
-          path: /{param}
+          path: /t/{param}
           method: GET
