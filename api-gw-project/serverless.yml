@@ -1,4 +1,4 @@
-service: api-gw-project
+service: apigw-lambda
 frameworkVersion: '3'
 
 provider:
@@ -28,13 +28,12 @@ package:
     - '!*'
     
 functions:
-  test:
-    handler: test.handler
+  function1:
+    handler: index.handler
     package:
       individually: true
       patterns:
-        - 'test.js'
-        - 'package.json'
+        - 'index.js'
     events:
       - httpApi:
           path: /t/{param}

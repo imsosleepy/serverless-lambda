@@ -3,7 +3,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { PutCommand, ScanCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 export const main = async (event) => {
-  console.log(event);Z
+  console.log(event);
 //  putItem(event);
   
   return {
