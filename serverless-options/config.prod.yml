@@ -1,0 +1,6 @@
+stage: prod
+apigw_id: wopz466br0
+logRetentionInDays: 180
+account_id: 301591718339
+apigw_url: apigw.polarishare-testbed.com 
+ddb_table: serverless-ddb-prod

@@ -1,0 +1,26 @@
+service: serverless-options
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  architecture: arm64
+  region: ap-northeast-2
+  memorySize: 256
+  timeout: 5
+  httpApi:
+    id: ${file(./config.${sls:stage}.yml):apigw_id}
+  tags:
+    Team: My Team
+    Application: serverless-app
+    Role: Backend Developer
+    Stage: ${sls:stage}
+    GitHub: https://github.com/imsosleepy/serverless-lambda
+
+functions:
+  function1:
+    handler: index.handler
+    environment:
+      STAGE: ${sls:stage}
+      APIGW_DOMAIN: ${file(./config.${sls:stage}.yml):apigw_url}
+      DDB_TABLE: ${file(./config.${sls:stage}.yml):ddb_table}

@@ -1,0 +1,15 @@
+{
+  "name": "serverless-options",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "deploy:function1:dev": "sls deploy -s dev function -f function1",
+    "deploy:function1:prod": "sls deploy -s prod function -f function1",
+    "deploy:all:dev": "sls deploy -s dev",
+    "deploy:all:prod": "sls deploy -s prod"
+  },
+  "devDependencies": {
+    "serverless": "^3.32.2"
+  }
+}
