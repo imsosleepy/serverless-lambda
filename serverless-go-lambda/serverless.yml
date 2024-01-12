@@ -1,0 +1,32 @@
+service: serverless-go-lambda
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: ap-northeast-2
+  architecture: arm64
+  runtime: provided.al2
+  memorySize: 256
+  timeout: 10
+  environment:
+    S3_BUCKET: testbed-lambda-bucket
+  deploymentBucket:
+    name: testbed-lambda-deploy-bucket
+  logRetentionInDays: 30
+  iam:
+    role:
+      name: testbed-s3-role
+      path: /lambda/
+      statements:
+        - Effect: Allow
+          Resource: arn:aws:s3:::testbed-lambda-bucket/*
+          Action: s3:PutObject
+
+functions:
+  go_function:
+    name: serverless-go-lambda
+    handler: bootstrap
+    package:
+      patterns:
+        - 'bootstrap'
+    url: true
