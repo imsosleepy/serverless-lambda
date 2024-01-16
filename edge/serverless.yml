@@ -1,0 +1,30 @@
+service: edge
+frameworkVersion: '3'
+
+plugins:
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
+  - serverless-lambda-edge-pre-existing-cloudfront
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  architecture: x86_64
+  region: us-east-1
+  memorySize: 256
+  timeout: 10
+  logRetentionInDays: 30
+  iam:
+    role: arn:aws:iam::301591718339:role/testbed-edge-role
+
+functions:
+  imageConverter:
+    name: webpConverter
+    handler: webpConverter.main
+    events:
+      - preExistingCloudFront:
+          distributionId: E2SUPQNSEGHOTO
+          eventType: origin-response
+          pathPattern: '*'
+          includeBody: false
+
