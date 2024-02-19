@@ -1,0 +1,47 @@
+service: ps-automated-writing
+frameworkVersion: '3'
+useDotenv: true
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  region: ap-northeast-2
+  architecture: arm64
+  runtime: python3.10
+  deploymentBucket:
+    name: ${env:DEPLOY_BUCKET_NAME}
+  logRetentionInDays: 30
+  environment:
+    STAGE: ${sls:stage}
+    S3_BUCKET: ${env:S3_BUCKET}
+  iam:
+    role:
+      name: ps-automated-writing
+      path: /lambda/
+      statements:
+        - Effect: Allow
+          Resource: arn:aws:s3:::${env:S3_BUCKET}/*
+          Action: s3:PutObject
+  tags:
+    Team: Metashare
+    Service: polarishare
+    Stage: ${sls:stage}
+    GitHub: https://github.com/decompanyio/automated-writing
+
+package:
+  exclude:
+    - node_modules/**
+    - automated_writing/**
+
+functions:
+  automated_writing:
+    handler: python/automated_writing.run
+    url: true
+    events:
+      - schedule: rate(1 hour)
